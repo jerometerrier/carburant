@@ -1,0 +1,4 @@
+[ZoneTransfer]
+ZoneId=3
+ReferrerUrl=https://data.economie.gouv.fr/explore/dataset/prix-carburants-fichier-instantane-test-ods-copie/export/?refine.dep_name=71&location=8,45.63901,3.68317&basemap=jawg.light
+HostUrl=https://data.economie.gouv.fr/explore/dataset/prix-carburants-fichier-instantane-test-ods-copie/download/?format=csv&timezone=Europe/Berlin&lang=fr&use_labels_for_header=true&csv_separator=%3B

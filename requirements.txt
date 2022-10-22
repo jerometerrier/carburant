@@ -1,0 +1,6 @@
+streamlit
+pandas
+ipykernel
+bokeh
+streamlit_bokeh_events
+geopy
