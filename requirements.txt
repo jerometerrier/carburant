@@ -4,3 +4,4 @@ ipykernel
 bokeh
 streamlit_bokeh_events
 geopy
+numpy

@@ -24,12 +24,13 @@ from geopy import Point
 from geopy.distance import distance
 from geopy.geocoders import Nominatim
 import pandas as pd
+import numpy as np
 
-
-
-@st.cache
+@st.cache(allow_output_mutation=True)
 def read_data():
-	df = pd.read_csv('prix-carburants-fichier-instantane-test-ods-copie.csv', sep=';')
+	df = pd.read_csv('src/prix-carburants-fichier-instantane-test-ods-copie.csv', sep=';')
+	df['lat'] = [x.split(',')[0] for x in df['geom']]
+	df['lon'] = [x.split(',')[1] for x in df['geom']]
 	return df
 
 def calculate_distance(df, lat, long):
@@ -43,11 +44,30 @@ def get_location(adresse):
 
 
 
-adresse = st.text_input("Adresse")
-location = get_location(adresse)
+
+
 data_load_state = st.text('Loading data...')
 df = read_data()
 data_load_state = st.text('Data loaded succesfully!!')
-calculate_distance(df, location.latitude, location.longitude)
 
-st.write(df[df['distance_km'] < 5][["ville", 'prix_valeur', 'prix_nom', 'prix_maj', 'geom']])
+adresse = st.text_input("Adresse")
+location = get_location(adresse)
+df2 = calculate_distance(df, location.latitude, location.longitude)
+
+st.write(df2[df2['distance_km'] < 5][["ville", 'prix_valeur', 'prix_nom', 'prix_maj', 'geom', 'lat','lon']])
+
+df = pd.DataFrame(
+    np.random.randn(1000, 2) / [50, 50] + [37.76, -122.4],
+    columns=['lat', 'lon'])
+
+st.map(df)
+
+
+st.write(df)
+# map1 = folium.Map(
+#     location=[59.338315,18.089960],
+#     tiles='cartodbpositron',
+#     zoom_start=12,
+# )
+# df.apply(lambda row:folium.CircleMarker(location=[row["latitude"], row["longitude"]]).add_to(map1), axis=1)
+# map1
