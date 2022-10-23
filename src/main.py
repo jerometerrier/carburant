@@ -19,13 +19,12 @@
 #     debounce_time=0)
 # st.write(result)
 
-from ast import And
+
 import streamlit as st
 from geopy import Point
 from geopy.distance import distance
 from geopy.geocoders import Nominatim
 import pandas as pd
-import numpy as np
 
 @st.cache(allow_output_mutation=True)
 def read_data():
