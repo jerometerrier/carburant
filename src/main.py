@@ -19,6 +19,7 @@
 #     debounce_time=0)
 # st.write(result)
 
+from ast import And
 import streamlit as st
 from geopy import Point
 from geopy.distance import distance
@@ -30,7 +31,9 @@ import numpy as np
 def read_data():
 	df = pd.read_csv('src/prix-carburants-fichier-instantane-test-ods-copie.csv', sep=';')
 	df['lat'] = [x.split(',')[0] for x in df['geom']]
+	df['lat'] = df['lat'].astype(float)
 	df['lon'] = [x.split(',')[1] for x in df['geom']]
+	df['lon'] = df['lon'].astype(float)
 	return df
 
 def calculate_distance(df, lat, long):
@@ -52,22 +55,9 @@ data_load_state = st.text('Data loaded succesfully!!')
 
 adresse = st.text_input("Adresse")
 location = get_location(adresse)
+distance_recherche = st.slider("Distance de recherche", 5,100,10,5,'%f')
+carburant_filter = st.multiselect("carburant",df['prix_nom'].unique())
 df2 = calculate_distance(df, location.latitude, location.longitude)
-
-st.write(df2[df2['distance_km'] < 5][["ville", 'prix_valeur', 'prix_nom', 'prix_maj', 'geom', 'lat','lon']])
-
-df = pd.DataFrame(
-    np.random.randn(1000, 2) / [50, 50] + [37.76, -122.4],
-    columns=['lat', 'lon'])
-
-st.map(df)
-
-
-st.write(df)
-# map1 = folium.Map(
-#     location=[59.338315,18.089960],
-#     tiles='cartodbpositron',
-#     zoom_start=12,
-# )
-# df.apply(lambda row:folium.CircleMarker(location=[row["latitude"], row["longitude"]]).add_to(map1), axis=1)
-# map1
+df_result = df2[(df2['distance_km'] < distance_recherche) & (df2['prix_nom'].isin(carburant_filter))][["ville", 'prix_valeur', 'prix_nom', 'prix_maj', 'geom', 'lat','lon']]
+st.write(df_result)
+st.map(df_result)
